@@ -1,34 +1,54 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { xml2json, json2xml } from 'xml-js';
 
 export function useXml() {
 	const [scenes, setScenes] = useState([]);
 	const [chapters, setChapters] = useState([]);
 	const [metadata, setMetadata] = useState([]);
 	const [xmlTxt, setXmlTxt] = useState('');
-	const [xmlDoc, setXmlDoc] = useState('');
+	const [xmlJson, setXmlJson] = useState('');
 
 	useEffect(() => {
-		if (!xmlDoc) return;
+		setXmlJson((prev) => {
+			if (!prev) return prev;
+			prev['cutting_tool_data']['clip']['scenes'] = scenes;
+			return { ...prev };
+		});
 	}, [scenes]);
 
 	useEffect(() => {
-		if (!xmlDoc) return;
+		setXmlJson((prev) => {
+			if (!prev) return prev;
+			prev['cutting_tool_data']['clip']['chapters'] = chapters;
+			return { ...prev };
+		});
 	}, [chapters]);
 
 	useEffect(() => {
-		if (!xmlDoc) return;
+		setXmlJson((prev) => {
+			if (!prev) return prev;
+			prev['cutting_tool_data']['clip']['metadata'] = metadata;
+			return { ...prev };
+		});
 	}, [metadata]);
 
 	useEffect(() => {
 		if (!xmlTxt) return;
-		const parser = new DOMParser();
-		setXmlDoc(parser.parseFromString(xmlTxt, 'text/xml'));
+		setXmlJson(JSON.parse(xml2json(xmlTxt, { compact: true, spaces: 2 })));
 	}, [xmlTxt]);
+
+	const getCompleteXML = useCallback(() => {
+		return json2xml(JSON.stringify(xmlJson), {
+			compact: true,
+			spaces: 2,
+		});
+	}, [xmlJson]);
 
 	return {
 		setScenes,
 		setChapters,
 		setMetadata,
 		setXmlTxt,
+		getCompleteXML,
 	};
 }
