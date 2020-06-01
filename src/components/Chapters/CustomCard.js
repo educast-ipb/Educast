@@ -39,12 +39,18 @@ const useStyles = makeStyles({
 		minHeight: '2.1vh',
 		color: '#12AADA',
 		background: 'white',
+		'&:focus': {
+			outline: 0,
+		},
 		'&:hover': {
 			color: '#12AADA',
 			background: '#EDD9FF',
 		},
 	},
 	thumbnailButton: {
+		'&:focus': {
+			outline: 0,
+		},
 		borderRadius: '0px',
 		maxWidth: '3vh',
 		maxHeight: '3vh',
@@ -145,12 +151,12 @@ const CustomCard = ({
 					</Typography>
 				}
 				action={
-						<Button
-							key={chapter.id}
-							className={classes.deleteButton}
-							startIcon={<FaTimes className={classes.deleteIcon} />}
-							onClick={() => deleteChapterFunction()}
-						/>
+					<Button
+						key={chapter.id}
+						className={classes.deleteButton}
+						startIcon={<FaTimes className={classes.deleteIcon} />}
+						onClick={() => deleteChapterFunction()}
+					/>
 				}
 			></CardHeader>
 			<div className={styles['unselectable-image']}>

@@ -8,8 +8,6 @@ import styles from './CustomSlider.module.scss';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import classNames from 'classnames';
 
-// TODO: fazer o negócio ficar laranja
-// TODO: resolver bug do resize
 const useStyles = makeStyles({
 	leftArrow: {
 		position: 'relative',

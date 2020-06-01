@@ -70,7 +70,6 @@ const EditableTextField = ({ type, value, updateTitleFunction, chapter, isTextFi
 					onBlur={handleInputOnBlur}
 					onKeyUp={handleInputOnKeyUp}
 					rowsMax={2}
-					// endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
 					inputProps={{
 						'aria-label': 'title',
 					}}
