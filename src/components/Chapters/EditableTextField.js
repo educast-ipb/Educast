@@ -5,15 +5,22 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const mkStyles = makeStyles({
 	editableTextfield: {
-		fontSize: '1.7vh',
+		fontSize: '0.75rem',
 		color: 'black',
 		background: '#ECECEC',
+		height: '2.5rem',
 		width: '100%',
-		height: '100%',
-	}
+		padding: '0.3125rem 0.625rem 0.125rem 0.625rem',
+	},
 });
 
-const EditableTextField = ({ type, value, updateTitleFunction, chapter, isTextFieldBeingEdited }) => {
+const EditableTextField = ({
+	type,
+	value,
+	updateTitleFunction,
+	chapter,
+	isTextFieldBeingEdited,
+}) => {
 	const [editable, setEditable] = useState(false);
 	const [fieldValue, setFieldValue] = useState(value);
 	const [fieldBackupValue, setFieldBackupValue] = useState('');
@@ -23,7 +30,7 @@ const EditableTextField = ({ type, value, updateTitleFunction, chapter, isTextFi
 		setFieldValue(event.target.value);
 	};
 
-	const handleInputOnBlur = (event) => {
+	const handleInputOnBlur = () => {
 		setEditable(false);
 		isTextFieldBeingEdited(false);
 		updateTitleFunction(chapter.id, fieldValue);
@@ -50,7 +57,7 @@ const EditableTextField = ({ type, value, updateTitleFunction, chapter, isTextFi
 		}
 	};
 
-	const handleFieldOnClick = (event) => {
+	const handleFieldOnClick = () => {
 		setEditable(editable === false);
 		isTextFieldBeingEdited(editable === false);
 	};

@@ -7,9 +7,6 @@
 }
 
 .custom-slider__input::-webkit-slider-runnable-track {
-	padding: 1px;
-	width: 100%;
-	height: 100%;
 	box-shadow: inset 0 0 6px rgba(80, 80, 80, 0.3);
 	-webkit-box-shadow: inset 0 0 6px rgba(80, 80, 80, 0.3);
 	background: #666666;
@@ -20,7 +17,7 @@
 .custom-slider__input::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	border: none;
-	height: 2vh;
+	height: 1rem;
 	box-shadow: inset 0 0 6px rgba(80, 80, 80, 0.3);
 	-webkit-box-shadow: inset 0 0 6px rgba(66, 62, 62, 0.3);
 	background: #d3d3d3;
@@ -37,7 +34,7 @@
 
 .carousel-container-with-scrollbar {
 	width: 100%;
-	padding-bottom: 3vh;
+	padding-bottom: 1.875rem;
 }
 
 .custom-slider {
@@ -47,10 +44,10 @@
 }
 
 .root-slider {
-	height: 100%;
 	width: 100%;
 	display: flex;
 	align-items: center;
+	margin-top: 5px;
 }
 
 .slider-image-item {
@@ -58,14 +55,10 @@
 }
 
 .zero-chapters {
-  left:0;
-  right:0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.custom-slider__input100::-webkit-slider-thumb {
-	width: 100%;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .custom-slider__input20::-webkit-slider-thumb {
@@ -94,4 +87,8 @@
 
 .custom-slider__input80::-webkit-slider-thumb {
 	width: 80%;
+}
+
+.custom-slider__input100::-webkit-slider-thumb {
+	width: 100%;
 }

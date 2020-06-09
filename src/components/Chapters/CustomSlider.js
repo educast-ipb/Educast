@@ -12,7 +12,7 @@ const useStyles = makeStyles({
 	leftArrow: {
 		position: 'relative',
 		color: '#0099ff',
-		fontSize: '4rem',
+		fontSize: '3.5rem',
 		'&:hover': {
 			background: 'rgba(0, 0, 0, 0)',
 		},
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 	rightArrow: {
 		position: 'relative',
 		color: '#0099ff',
-		fontSize: '4rem',
+		fontSize: '3.5rem',
 		'&:hover': {
 			background: 'rgba(0, 0, 0, 0)',
 		},
@@ -318,23 +318,23 @@ const CustomSlider = ({
 		desktop: {
 			breakpoint: {
 				max: 3000,
-				min: 1600,
+				min: 1230,
 			},
-			items: 6,
+			items: 5,
 		},
 		mobile: {
 			breakpoint: {
-				max: 930,
+				max: 840,
 				min: 0,
 			},
 			items: 2,
 		},
 		tablet: {
 			breakpoint: {
-				max: 1600,
-				min: 930,
+				max: 1230,
+				min: 840,
 			},
-			items: 4,
+			items: 3,
 		},
 	};
 

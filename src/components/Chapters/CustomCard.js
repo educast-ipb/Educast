@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -18,44 +17,62 @@ import { useDropzone } from 'react-dropzone';
 
 const useStyles = makeStyles({
 	root: {
-		marginTop: '3%',
-		maxWidth: '250px',
+		minWidth: '12.5rem',
+		maxWidth: '12.5rem',
+		minHeight: '12.8125rem',
+		maxHeight: '12.8125rem',
 	},
-	media: {
-		height: '16vh',
+	cardHeader: {
+		display: 'flex',
+		flexDirection: 'row',
+		background: '#009bff',
+		color: 'white',
+		cursor: 'pointer',
 		width: '100%',
-		position: 'relative',
+		maxHeight: '1.875rem', // 30px
+		minHeight: '1.875rem',
+	},
+	cardMedia: {
+		maxHeight: '7.1875rem', // 115px
+		minHeight: '7.1875rem',
+		width: '100%',
 	},
 	title: {
-		fontSize: '2vh',
+		paddingLeft: '0.625rem', // 10px
+		paddingTop: '0.25rem',
+		fontSize: '0.9375rem',
 	},
 	deleteButton: {
-		borderRadius: '0px',
-		paddingTop: '3%',
-		paddingRight: '2%',
-		maxWidth: '2.1vh',
-		maxHeight: '2.1vh',
-		minWidth: '2.1vh',
-		minHeight: '2.1vh',
-		color: '#12AADA',
-		background: 'white',
 		'&:focus': {
 			outline: 0,
 		},
+		borderRadius: '0px',
+		maxWidth: '0.9375rem',
+		maxHeight: '0.9375rem',
+		minWidth: '0.9375rem',
+		minHeight: '0.9375rem',
+		color: '#12AADA',
+		background: 'white',
 		'&:hover': {
 			color: '#12AADA',
 			background: '#EDD9FF',
 		},
+	},
+	deleteBox: {
+		marginLeft: 'auto',
+		order: '2',
+		paddingTop: '0.125rem', // 3px
+		paddingRight: '0.4375rem', // 7px
 	},
 	thumbnailButton: {
 		'&:focus': {
 			outline: 0,
 		},
 		borderRadius: '0px',
-		maxWidth: '3vh',
-		maxHeight: '3vh',
-		minWidth: '3vh',
-		minHeight: '3vh',
+		maxWidth: '1.5625rem',
+		maxHeight: '1.5625rem',
+		minWidth: '1.5625rem',
+		minHeight: '1.5625rem',
 		color: '#12AADA',
 		background: 'white',
 		'&:hover': {
@@ -63,40 +80,23 @@ const useStyles = makeStyles({
 			background: '#EDD9FF',
 		},
 	},
-	cardHeader: {
-		background: '#009bff',
-		color: 'white',
-		cursor: 'pointer',
-		padding: '1.5vh',
-		maxHeight: '4vh',
-
-		minHeight: '4vh',
-	},
 	boxes: {
-		paddingTop: '0.6rem',
-		paddingRight: '0.6rem',
-	},
-	cardActions: {
-		background: '#F3E9FC',
-		maxHeight: '9vh',
+		display: 'flex',
+		justifyContent: 'flex-end',
+		paddingTop: '0.4375rem',
+		paddingRight: '0.5rem',
 	},
 	deleteIcon: {
-		position: 'absolute',
-		top: '12%',
-		left: '11%',
-		maxWidth: '1.7vh',
-		maxHeight: '1.7vh',
-		minWidth: '1.7vh',
-		minHeight: '1.7vh',
+		maxWidth: '0.8125rem',
+		maxHeight: '0.8125rem',
+		minWidth: '0.8125rem',
+		minHeight: '0.8125rem',
 	},
 	thumbnailIcons: {
-		position: 'absolute',
-		top: '14%',
-		left: '16%',
-		maxWidth: '2vh',
-		maxHeight: '2vh',
-		minWidth: '2vh',
-		minHeight: '2vh',
+		maxWidth: '1rem',
+		maxHeight: '1rem',
+		minWidth: '1rem',
+		minHeight: '1rem',
 	},
 });
 
@@ -142,67 +142,59 @@ const CustomCard = ({
 	});
 
 	return (
-		<Card className={classes.root} square={true}>
-			<CardHeader
-				className={classes.cardHeader}
-				title={
+		<div className={styles['strange-css']}>
+			<Card className={classes.root} square={true}>
+				<CardMedia className={classes.cardHeader}>
 					<Typography className={classes.title} variant="h5" component="h5">
 						Capítulo {order}
 					</Typography>
-				}
-				action={
-					<Button
-						key={chapter.id}
-						className={classes.deleteButton}
-						startIcon={<FaTimes className={classes.deleteIcon} />}
-						onClick={() => deleteChapterFunction()}
-					/>
-				}
-			></CardHeader>
-			<div className={styles['unselectable-image']}>
-				<CardMedia className={classes.media} image={thumbnailImage}>
-					<Box
-						display="flex"
-						justifyContent="flex-end"
-						className={classes.boxes}
-					>
+					<Box className={classes.deleteBox}>
 						<Button
-							className={classes.thumbnailButton}
-							startIcon={<FaImages className={classes.thumbnailIcons} />}
-							onClick={() => handleThumbnailSelection('primary')}
-						/>
-					</Box>
-					<Box
-						display="flex"
-						justifyContent="flex-end"
-						className={classes.boxes}
-					>
-						<Button
-							className={classes.thumbnailButton}
-							startIcon={
-								<FaChalkboardTeacher className={classes.thumbnailIcons} />
-							}
-							onClick={() => handleThumbnailSelection('secondary')}
-						/>
-					</Box>
-					<Box
-						display="flex"
-						justifyContent="flex-end"
-						className={classes.boxes}
-					>
-						<div {...getRootProps()}>
-							<input {...getInputProps()} />
-							<Button
-								key={chapter.id}
-								className={classes.thumbnailButton}
-								onClick={open}
-								startIcon={<FaUpload className={classes.thumbnailIcons} />}
-							/>
-						</div>
+							key={chapter.id}
+							className={classes.deleteButton}
+							onClick={() => deleteChapterFunction()}
+						>
+							<FaTimes className={classes.deleteIcon} />
+						</Button>
 					</Box>
 				</CardMedia>
-			</div>
-			<div className={classes.cardActions}>
+				<div className={styles['unselectable-image']}>
+					<CardMedia className={classes.cardMedia} image={thumbnailImage}>
+						<Box
+							display="flex"
+							justifyContent="flex-end"
+							paddingTop="0.8125rem"
+							paddingRight="0.5rem"
+						>
+							<Button
+								className={classes.thumbnailButton}
+								onClick={() => handleThumbnailSelection('primary')}
+							>
+								<FaImages className={classes.thumbnailIcons} />
+							</Button>
+						</Box>
+						<Box className={classes.boxes}>
+							<Button
+								className={classes.thumbnailButton}
+								onClick={() => handleThumbnailSelection('secondary')}
+							>
+								<FaChalkboardTeacher className={classes.thumbnailIcons} />
+							</Button>
+						</Box>
+						<Box className={classes.boxes}>
+							<div {...getRootProps()}>
+								<input {...getInputProps()} />
+								<Button
+									key={chapter.id}
+									className={classes.thumbnailButton}
+									onClick={open}
+								>
+									<FaUpload className={classes.thumbnailIcons} />
+								</Button>
+							</div>
+						</Box>
+					</CardMedia>
+				</div>
 				<div className={styles['CustomCard__TimeLabel']}>
 					In {chapter.position}
 				</div>
@@ -213,8 +205,8 @@ const CustomCard = ({
 					chapter={chapter}
 					isTextFieldBeingEdited={isTextFieldBeingEdited}
 				/>
-			</div>
-		</Card>
+			</Card>
+		</div>
 	);
 };
 
