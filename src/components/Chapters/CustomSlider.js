@@ -50,6 +50,7 @@ const CustomSlider = ({
 	const [scrollBarValue, setScrollBarValue] = useState(0);
 	const [disableScrollBar, setDisableScrollBar] = useState(false);
 
+	// Prevents carousel overflow by forcing maximum valid value.
 	const resizeWindow = () => {
 		setSize([window.innerWidth, window.innerHeight]);
 		if (carouselRef.current.state) {
@@ -76,6 +77,7 @@ const CustomSlider = ({
 		}
 	};
 
+	// Calculates scrollbar width.
 	const getScrollBarWidth = (itemsThatFit, total) => {
 		let size = 0;
 		if (total > 0 && total > itemsThatFit) {
@@ -96,6 +98,7 @@ const CustomSlider = ({
 	};
 
 	useEffect(() => {
+		// Maximum amount of cards that fits in screen size.
 		const length = () => {
 			const width = size[0];
 			if (width > responsive.desktop.breakpoint.min) {
@@ -106,6 +109,7 @@ const CustomSlider = ({
 				return responsive.mobile.items;
 			}
 		};
+		// Sets scrollbar width.
 		setScrollBarValue(getScrollBarWidth(length(), chapters.length));
 	}, [chapters.length, size]);
 
@@ -115,10 +119,12 @@ const CustomSlider = ({
 		return () => window.removeEventListener('resize', resizeWindow);
 	}, []);
 
+	// Helper for disabling draggable action on carousel if card description is being edited.
 	const isTextFieldBeingEdited = (isIt) => {
 		setCarouselDraggable(!isIt);
 	};
 
+	// Deletes card and updates carousel state/scrollbar value.
 	const modifiedDeleteChapterFunction = async (id) => {
 		const deleted = await deleteChapterFunction(id);
 		if (deleted === true) {
@@ -180,6 +186,7 @@ const CustomSlider = ({
 		});
 	};
 
+	// Function helper for getting maximum scrollbar value.
 	const getMaxTranslateX = () => {
 		if (carouselRef.current) {
 			const { itemWidth, totalItems, slidesToShow } = carouselRef.current.state;
@@ -190,11 +197,13 @@ const CustomSlider = ({
 		}
 	};
 
+	// Helper function for getting maximum scrollbar value.
 	const getMaxScrollbarValue = (value) => {
 		const { itemWidth, totalItems, slidesToShow } = carouselRef.current.state;
 		return (itemWidth * (totalItems - slidesToShow)) / value;
 	};
 
+	// Carousel's right arrow.
 	const CustomRightArrow = () => {
 		let value = 0;
 		if (carouselRef.current) {
@@ -245,6 +254,7 @@ const CustomSlider = ({
 		);
 	};
 
+	// Carousel's left arrow.
 	const CustomLeftArrow = () => {
 		const handleOnClick = () => {
 			carouselRef.current.isAnimationAllowed = true;
@@ -275,6 +285,7 @@ const CustomSlider = ({
 		);
 	};
 
+	// Carousel's scrollbar.
 	const ChapterScrollbar = () => {
 		carouselRef.current.isAnimationAllowed = true;
 		let value = 0.0;

@@ -3,8 +3,8 @@ import Input from '@material-ui/core/Input';
 import styles from './EditableTextField.module.scss';
 import { makeStyles } from '@material-ui/core/styles';
 
-const mkStyles = makeStyles({
-	editableTextfield: {
+const useStyles = makeStyles({
+	editableTextField: {
 		fontSize: '0.75rem',
 		color: 'black',
 		background: '#ECECEC',
@@ -24,7 +24,7 @@ const EditableTextField = ({
 	const [editable, setEditable] = useState(false);
 	const [fieldValue, setFieldValue] = useState(value);
 	const [fieldBackupValue, setFieldBackupValue] = useState('');
-	const classes = mkStyles();
+	const classes = useStyles();
 
 	const handleInputOnChange = (event) => {
 		setFieldValue(event.target.value);
@@ -69,7 +69,7 @@ const EditableTextField = ({
 					id="chapter-title"
 					type={type}
 					value={fieldValue}
-					className={classes.editableTextfield}
+					className={classes.editableTextField}
 					autoFocus
 					multiline={true}
 					onFocus={handleInputOnFocus}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Swal from 'sweetalert2';
 import CustomSlider from './CustomSlider';
 import { useDispatch, useSelector } from 'react-redux';
+import styles from './Chapters.module.scss';
 
 const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 	const [chapters, setChapters] = useState([]);
@@ -71,7 +72,6 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 		updateChapterImg(path, chapterId);
 	};
 
-	// Fix this function
 	const updateTitleFunction = (id, newTitle) => {
 		updateChapterTitle(newTitle, id);
 		setChapters(
@@ -96,10 +96,14 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 			cancelButtonColor: '#d33',
 			confirmButtonText: 'Excluir',
 			cancelButtonText: 'Cancelar',
+			customClass: {
+				confirmButton: styles['confirm-button'],
+				cancelButton: styles['cancel-button'],
+				popup: styles['popup-modal'],
+			},
 		}).then((result) => {
 			if (result.value) {
 				deleted = true;
-				// next line may or may not generate a bug
 				setChapters(
 					chapters.filter((chapter) => {
 						return chapter.id !== id;
