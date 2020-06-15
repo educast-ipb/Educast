@@ -9,9 +9,6 @@ import styles from './CustomSlider.module.scss';
 import CustomCard from './CustomCard';
 import { CustomRightArrow, CustomLeftArrow } from './SliderArrows';
 
-// TODO: import default colors
-// TODO: fix scrollbar bug (click on thumbnail buttons then use scrollBar)
-
 const CustomSlider = ({
 	deleteChapterFunction,
 	updateTitleFunction,
