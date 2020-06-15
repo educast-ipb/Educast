@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
 import 'react-multi-carousel/lib/styles.css';
@@ -25,14 +25,8 @@ const CustomSlider = ({
 	const [disableScrollBar, setDisableScrollBar] = useState(false);
 	const chs = useSelector((state) => state.sceneChapters.chapters);
 
-	useEffect(() => {
-		resizeWindow();
-		window.addEventListener('resize', resizeWindow);
-		return () => window.removeEventListener('resize', resizeWindow);
-	});
-
 	// Prevents carousel overflow by forcing maximum valid value.
-	const resizeWindow = () => {
+	const resizeWindow = useCallback(() => {
 		setSize([window.innerWidth, window.innerHeight]);
 		if (carouselRef.current.state) {
 			const { transform, totalItems, slidesToShow } = carouselRef.current.state;
@@ -56,7 +50,13 @@ const CustomSlider = ({
 				}
 			}
 		}
-	};
+	}, []);
+
+	useEffect(() => {
+		resizeWindow();
+		window.addEventListener('resize', resizeWindow);
+		return () => window.removeEventListener('resize', resizeWindow);
+	}, [resizeWindow]);
 
 	// Breakpoints in pixels for limiting how many cards will be shown.
 	const responsive = {
