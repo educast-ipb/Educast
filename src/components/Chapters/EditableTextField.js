@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import Input from '@material-ui/core/Input';
-import styles from './EditableTextField.module.scss';
+
 import { makeStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+
+import styles from './EditableTextField.module.scss';
 
 const useStyles = makeStyles({
 	editableTextField: {

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -11,9 +13,10 @@ import {
 	FaChalkboardTeacher,
 } from 'react-icons/fa';
 import Box from '@material-ui/core/Box';
+import { useDropzone } from 'react-dropzone';
+
 import EditableTextField from './EditableTextField';
 import styles from './CustomCard.module.scss';
-import { useDropzone } from 'react-dropzone';
 
 const useStyles = makeStyles({
 	root: {
@@ -112,6 +115,7 @@ const CustomCard = ({
 }) => {
 	const [thumbnailImage, setThumbnailImage] = useState('');
 	const classes = useStyles();
+	const videoInSeconds = useSelector((state) => state.video.duration);
 
 	useEffect(() => {
 		setThumbnailImage(chapter.img);
@@ -141,13 +145,29 @@ const CustomCard = ({
 		},
 	});
 
+	const pad = (num) => {
+		return ('0' + num).slice(-2);
+	};
+
+	const hhmmss = (secs) => {
+		let minutes = Math.floor(secs / 60);
+		secs = secs % 60;
+		let hours = Math.floor(minutes / 60);
+		minutes = minutes % 60;
+		return `${pad(hours)}:${pad(minutes)}:${pad(secs)}`;
+	};
+
+	const inSeconds = (position) => {
+		return Math.floor(videoInSeconds * position);
+	};
+
 	return (
 		<div>
 			<Card className={classes.root} square={true}>
 				<CardMedia
 					className={classes.cardHeader}
 					style={
-						chapter.isSelected
+						chapter.isSelected === true
 							? { background: '#F69333' }
 							: { background: '#009bff' }
 					}
@@ -208,7 +228,7 @@ const CustomCard = ({
 					</CardMedia>
 				</div>
 				<div className={styles['CustomCard__TimeLabel']}>
-					In {chapter.position}
+					In {hhmmss(inSeconds(chapter.position))}
 				</div>
 				<EditableTextField
 					type="text"

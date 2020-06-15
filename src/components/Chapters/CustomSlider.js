@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Carousel from 'react-multi-carousel';
-import { makeStyles } from '@material-ui/core/styles';
-import CustomCard from './CustomCard';
+import { useSelector } from 'react-redux';
+
 import 'react-multi-carousel/lib/styles.css';
+import { makeStyles } from '@material-ui/core/styles';
+import Carousel from 'react-multi-carousel';
 import IconButton from '@material-ui/core/IconButton';
-import styles from './CustomSlider.module.scss';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import classNames from 'classnames';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
+import styles from './CustomSlider.module.scss';
+import CustomCard from './CustomCard';
 
 const useStyles = makeStyles({
 	leftArrow: {
@@ -34,7 +37,6 @@ const useStyles = makeStyles({
 });
 
 const CustomSlider = ({
-	chapters,
 	deleteChapterFunction,
 	updateTitleFunction,
 	selectThumbnailFunction,
@@ -50,6 +52,7 @@ const CustomSlider = ({
 	const [size, setSize] = useState([0, 0]);
 	const [scrollBarValue, setScrollBarValue] = useState(0);
 	const [disableScrollBar, setDisableScrollBar] = useState(false);
+	const chs = useSelector((state) => state.sceneChapters.chapters);
 
 	// Prevents carousel overflow by forcing maximum valid value.
 	const resizeWindow = () => {
@@ -111,8 +114,8 @@ const CustomSlider = ({
 			}
 		};
 		// Sets scrollbar width.
-		setScrollBarValue(getScrollBarWidth(length(), chapters.length));
-	}, [chapters.length, size]);
+		setScrollBarValue(getScrollBarWidth(length(), chs.length));
+	}, [chs.length, size]);
 
 	useEffect(() => {
 		resizeWindow();
@@ -167,7 +170,8 @@ const CustomSlider = ({
 
 	const cardsToShow = () => {
 		let order = 0;
-		return chapters.map((chapter) => {
+		// return chapters.map((chapter) => {
+		return chs.map((chapter) => {
 			order++;
 			return (
 				<CustomCard
@@ -363,7 +367,7 @@ const CustomSlider = ({
 				keyBoardControl={false}
 				partialVisbile={false}
 				customButtonGroup={
-					chapters.length === 0 ? <NoChapters /> : <ChapterScrollbar />
+					chs.length === 0 ? <NoChapters /> : <ChapterScrollbar />
 				}
 				infinite={false}
 				itemClass={styles['slider-image-item']}
