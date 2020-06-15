@@ -200,6 +200,9 @@ const CustomSlider = ({
 				transform: -nextTransform,
 				currentSlide: nextSlide,
 			});
+			if (e.target.value === 0) {
+				carouselRef.current.isAnimationAllowed = true;
+			}
 		};
 		return (
 			<div className={styles['custom-slider']}>
