@@ -18,6 +18,7 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 				img: ch.img,
 				position: hhmmss(positionToSeconds),
 				title: ch.title,
+				isSelected: false, // replace this with real data
 			};
 			return temp;
 		});
@@ -84,6 +85,19 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 		);
 	};
 
+	const selectChapter = (id) => {
+		// update redux
+		const c = chapters.map((ch) => {
+			if (id === ch.id) {
+				ch.isSelected = true;
+			} else {
+				ch.isSelected = false;
+			}
+			return ch;
+		});
+		setChapters(c);
+	};
+
 	const deleteChapterFunction = async (id) => {
 		const chapter = chs.find((chapter) => chapter.id === id);
 		let deleted = false;
@@ -123,6 +137,7 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 			selectThumbnailFunction={selectThumbnailFunction}
 			getPresenterScreenShot={getPresenterScreenShot}
 			getPresentationScreenShot={getPresentationScreenShot}
+			selectChapter={selectChapter}
 		/>
 	);
 };

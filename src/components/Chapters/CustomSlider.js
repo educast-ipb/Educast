@@ -40,6 +40,7 @@ const CustomSlider = ({
 	selectThumbnailFunction,
 	getPresenterScreenShot,
 	getPresentationScreenShot,
+	selectChapter,
 }) => {
 	const carouselRef = useRef(null);
 	const scrollbarRef = useRef(null);
@@ -181,6 +182,7 @@ const CustomSlider = ({
 					getPresenterScreenShot={getPresenterScreenShot}
 					getPresentationScreenShot={getPresentationScreenShot}
 					isTextFieldBeingEdited={isTextFieldBeingEdited}
+					selectChapter={() => selectChapter(chapter.id)}
 				></CustomCard>
 			);
 		});

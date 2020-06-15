@@ -25,9 +25,7 @@ const useStyles = makeStyles({
 	cardHeader: {
 		display: 'flex',
 		flexDirection: 'row',
-		background: '#009bff',
 		color: 'white',
-		cursor: 'pointer',
 		width: '100%',
 		maxHeight: '1.875rem', // 30px
 		minHeight: '1.875rem',
@@ -38,6 +36,7 @@ const useStyles = makeStyles({
 		width: '100%',
 	},
 	title: {
+		cursor: 'pointer',
 		paddingLeft: '0.625rem', // 10px
 		paddingTop: '0.25rem',
 		fontSize: '0.9375rem',
@@ -109,6 +108,7 @@ const CustomCard = ({
 	getPresentationScreenShot,
 	getPresenterScreenShot,
 	isTextFieldBeingEdited,
+	selectChapter,
 }) => {
 	const [thumbnailImage, setThumbnailImage] = useState('');
 	const classes = useStyles();
@@ -142,10 +142,22 @@ const CustomCard = ({
 	});
 
 	return (
-		<div className={styles['strange-css']}>
+		<div>
 			<Card className={classes.root} square={true}>
-				<CardMedia className={classes.cardHeader}>
-					<Typography className={classes.title} variant="h5" component="h5">
+				<CardMedia
+					className={classes.cardHeader}
+					style={
+						chapter.isSelected
+							? { background: '#F69333' }
+							: { background: '#009bff' }
+					}
+				>
+					<Typography
+						onClick={() => selectChapter()}
+						className={classes.title}
+						variant="h5"
+						component="h5"
+					>
 						Capítulo {order}
 					</Typography>
 					<Box className={classes.deleteBox}>
