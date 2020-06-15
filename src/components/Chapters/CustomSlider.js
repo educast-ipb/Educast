@@ -29,7 +29,7 @@ const CustomSlider = ({
 		resizeWindow();
 		window.addEventListener('resize', resizeWindow);
 		return () => window.removeEventListener('resize', resizeWindow);
-	}, []);
+	});
 
 	// Prevents carousel overflow by forcing maximum valid value.
 	const resizeWindow = () => {
@@ -58,6 +58,31 @@ const CustomSlider = ({
 		}
 	};
 
+	// Breakpoints in pixels for limiting how many cards will be shown.
+	const responsive = {
+		desktop: {
+			breakpoint: {
+				max: 3000,
+				min: 1230,
+			},
+			items: 5,
+		},
+		mobile: {
+			breakpoint: {
+				max: 840,
+				min: 0,
+			},
+			items: 2,
+		},
+		tablet: {
+			breakpoint: {
+				max: 1230,
+				min: 840,
+			},
+			items: 3,
+		},
+	};
+
 	useEffect(() => {
 		// Maximum amount of cards that fits in screen size.
 		const length = () => {
@@ -72,7 +97,7 @@ const CustomSlider = ({
 		};
 		// Sets scrollbar width.
 		setScrollBarValue(getScrollBarWidth(length(), chs.length));
-	}, [chs.length, size]);
+	}, [chs.length, size, responsive]);
 
 	// Calculates scrollbar width in percentage.
 	const getScrollBarWidth = (itemsThatFit, total) => {
@@ -217,31 +242,6 @@ const CustomSlider = ({
 				/>
 			</div>
 		);
-	};
-
-	// Breakpoints in pixels for limiting how many cards will be shown.
-	const responsive = {
-		desktop: {
-			breakpoint: {
-				max: 3000,
-				min: 1230,
-			},
-			items: 5,
-		},
-		mobile: {
-			breakpoint: {
-				max: 840,
-				min: 0,
-			},
-			items: 2,
-		},
-		tablet: {
-			breakpoint: {
-				max: 1230,
-				min: 840,
-			},
-			items: 3,
-		},
 	};
 
 	return (
