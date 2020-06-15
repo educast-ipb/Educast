@@ -1,4 +1,4 @@
-.CustomCard__TimeLabel {
+.time-label {
 	color: #009bff;
 	background: #ececec;
 	height: 1.25rem;
@@ -12,4 +12,90 @@
 	-khtml-user-select: none;
 	-webkit-user-select: none;
 	-o-user-select: none;
+}
+
+.root {
+	min-width: 12.5rem;
+	max-width: 12.5rem;
+	min-height: 12.8125rem;
+	max-height: 12.8125rem;
+}
+
+.card-header {
+	display: flex !important;
+	flex-direction: row;
+	color: white;
+	width: 100%;
+	max-height: 1.875rem; // 30px
+	min-height: 1.875rem;
+}
+
+.card-media {
+	max-height: 7.1875rem; // 115px
+	min-height: 7.1875rem;
+	width: 100%;
+}
+
+.thumbnail-button {
+	max-width: 1.5625rem !important;
+	max-height: 1.5625rem !important;
+	min-width: 1.5625rem !important;
+	min-width: 1.5625rem !important;
+}
+
+.button {
+	border-radius: 0 !important;
+	color: #12aada !important; // import default color later
+	background-color: white !important;
+}
+
+.button:focus {
+	outline: 0;
+}
+
+.button:hover {
+	color: #12aada;
+	background-color: #edd9ff !important;
+}
+
+.card-title {
+	cursor: pointer;
+	padding-left: 0.625rem; // 10px
+	padding-top: 0.25rem;
+	font-size: 0.9375rem !important;
+}
+
+.delete-button {
+	max-width: 0.9375rem !important;
+	max-height: 0.9375rem !important;
+	min-width: 0.9375rem !important;
+	min-height: 0.9375rem !important;
+}
+
+.delete-box {
+	margin-left: auto;
+	order: 2;
+	padding-top: 0.125rem; // 3px
+	padding-right: 0.4375rem; // 7px
+}
+
+.card-boxes {
+	display: flex;
+	justify-content: flex-end;
+	padding-top: 0.4375rem;
+	padding-right: 0.5rem;
+}
+
+.thumbnail-icons {
+	max-width: 1rem;
+	max-height: 1rem;
+	min-width: 1rem;
+	min-height: 1rem;
+}
+
+.delete-icon {
+	max-width: 0.8125rem;
+	max-height: 0.8125rem;
+	min-width: 0.8125rem;
+	min-height: 0.8125rem;
 }

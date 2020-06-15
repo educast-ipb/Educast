@@ -1,9 +1,6 @@
 .custom-slider__input {
-	-webkit-appearance: none;
-}
-
-.custom-slider__input {
 	width: 100%;
+	-webkit-appearance: none;
 }
 
 .custom-slider__input::-webkit-slider-runnable-track {
@@ -28,11 +25,7 @@
 	outline: none;
 }
 
-.custom-slider__input:focus::-webkit-slider-runnable-track {
-	background: #666666;
-}
-
-.carousel-container-with-scrollbar {
+.carousel-container-with-scrollBar {
 	width: 100%;
 	padding-bottom: 1.4375rem;
 }
@@ -45,9 +38,9 @@
 
 .root-slider {
 	width: 100%;
+	height: 100%;
 	display: flex;
 	align-items: center;
-	height: 100%;
 }
 
 .slider-image-item {
@@ -61,6 +54,7 @@
 	margin-right: auto;
 }
 
+// haha lol :D
 .custom-slider__input20::-webkit-slider-thumb {
 	width: 20%;
 }

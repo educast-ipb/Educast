@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
@@ -14,93 +13,10 @@ import {
 } from 'react-icons/fa';
 import Box from '@material-ui/core/Box';
 import { useDropzone } from 'react-dropzone';
+import classNames from 'classnames';
 
 import EditableTextField from './EditableTextField';
 import styles from './CustomCard.module.scss';
-
-const useStyles = makeStyles({
-	root: {
-		minWidth: '12.5rem',
-		maxWidth: '12.5rem',
-		minHeight: '12.8125rem',
-		maxHeight: '12.8125rem',
-	},
-	cardHeader: {
-		display: 'flex',
-		flexDirection: 'row',
-		color: 'white',
-		width: '100%',
-		maxHeight: '1.875rem', // 30px
-		minHeight: '1.875rem',
-	},
-	cardMedia: {
-		maxHeight: '7.1875rem', // 115px
-		minHeight: '7.1875rem',
-		width: '100%',
-	},
-	title: {
-		cursor: 'pointer',
-		paddingLeft: '0.625rem', // 10px
-		paddingTop: '0.25rem',
-		fontSize: '0.9375rem',
-	},
-	deleteButton: {
-		'&:focus': {
-			outline: 0,
-		},
-		borderRadius: '0px',
-		maxWidth: '0.9375rem',
-		maxHeight: '0.9375rem',
-		minWidth: '0.9375rem',
-		minHeight: '0.9375rem',
-		color: '#12AADA',
-		background: 'white',
-		'&:hover': {
-			color: '#12AADA',
-			background: '#EDD9FF',
-		},
-	},
-	deleteBox: {
-		marginLeft: 'auto',
-		order: '2',
-		paddingTop: '0.125rem', // 3px
-		paddingRight: '0.4375rem', // 7px
-	},
-	thumbnailButton: {
-		'&:focus': {
-			outline: 0,
-		},
-		borderRadius: '0px',
-		maxWidth: '1.5625rem',
-		maxHeight: '1.5625rem',
-		minWidth: '1.5625rem',
-		minHeight: '1.5625rem',
-		color: '#12AADA',
-		background: 'white',
-		'&:hover': {
-			color: '#12AADA',
-			background: '#EDD9FF',
-		},
-	},
-	boxes: {
-		display: 'flex',
-		justifyContent: 'flex-end',
-		paddingTop: '0.4375rem',
-		paddingRight: '0.5rem',
-	},
-	deleteIcon: {
-		maxWidth: '0.8125rem',
-		maxHeight: '0.8125rem',
-		minWidth: '0.8125rem',
-		minHeight: '0.8125rem',
-	},
-	thumbnailIcons: {
-		maxWidth: '1rem',
-		maxHeight: '1rem',
-		minWidth: '1rem',
-		minHeight: '1rem',
-	},
-});
 
 const CustomCard = ({
 	order,
@@ -114,13 +30,13 @@ const CustomCard = ({
 	selectChapter,
 }) => {
 	const [thumbnailImage, setThumbnailImage] = useState('');
-	const classes = useStyles();
 	const videoInSeconds = useSelector((state) => state.video.duration);
 
 	useEffect(() => {
 		setThumbnailImage(chapter.img);
 	}, [chapter.img]);
 
+	// Changes card thumbnail.
 	const handleThumbnailSelection = (path) => {
 		if (path === 'primary') {
 			chapter.img = getPresentationScreenShot();
@@ -131,6 +47,7 @@ const CustomCard = ({
 		setThumbnailImage(chapter.img);
 	};
 
+	// This is for image upload + generating image preview.
 	const { getRootProps, getInputProps, open } = useDropzone({
 		accept: 'image/*',
 		noClick: true,
@@ -145,10 +62,12 @@ const CustomCard = ({
 		},
 	});
 
+	// Helper for formatting time label.
 	const pad = (num) => {
 		return ('0' + num).slice(-2);
 	};
 
+	// Helper for formatting time label (returns hh:mm:ss given position in seconds).
 	const hhmmss = (secs) => {
 		let minutes = Math.floor(secs / 60);
 		secs = secs % 60;
@@ -157,88 +76,95 @@ const CustomCard = ({
 		return `${pad(hours)}:${pad(minutes)}:${pad(secs)}`;
 	};
 
+	// Returns position of chapter in seconds.
 	const inSeconds = (position) => {
 		return Math.floor(videoInSeconds * position);
 	};
 
 	return (
-		<div>
-			<Card className={classes.root} square={true}>
-				<CardMedia
-					className={classes.cardHeader}
-					style={
-						chapter.isSelected === true
-							? { background: '#F69333' }
-							: { background: '#009bff' }
-					}
+		<Card className={styles['root']} square={true}>
+			<CardMedia
+				className={styles['card-header']}
+				style={
+					chapter.isSelected === true
+						? { background: '#F69333' }
+						: { background: '#009bff' }
+				}
+			>
+				<Typography
+					onClick={() => selectChapter()}
+					className={styles['card-title']}
+					variant="h5"
+					component="h5"
 				>
-					<Typography
-						onClick={() => selectChapter()}
-						className={classes.title}
-						variant="h5"
-						component="h5"
+					Capítulo {order}
+				</Typography>
+				<Box className={styles['delete-box']}>
+					<Button
+						key={chapter.id}
+						className={classNames(styles['delete-button'], styles['button'])}
+						onClick={() => deleteChapterFunction()}
 					>
-						Capítulo {order}
-					</Typography>
-					<Box className={classes.deleteBox}>
+						<FaTimes className={styles['delete-icon']} />
+					</Button>
+				</Box>
+			</CardMedia>
+			<div className={styles['unselectable-image']}>
+				<CardMedia className={styles['card-media']} image={thumbnailImage}>
+					<Box
+						className={styles['card-boxes']}
+						paddingTop="0.8125rem"
+						paddingRight="0.5rem"
+					>
 						<Button
-							key={chapter.id}
-							className={classes.deleteButton}
-							onClick={() => deleteChapterFunction()}
+							className={classNames(
+								styles['thumbnail-button'],
+								styles['button']
+							)}
+							onClick={() => handleThumbnailSelection('primary')}
 						>
-							<FaTimes className={classes.deleteIcon} />
+							<FaImages className={styles['thumbnail-icons']} />
 						</Button>
 					</Box>
-				</CardMedia>
-				<div className={styles['unselectable-image']}>
-					<CardMedia className={classes.cardMedia} image={thumbnailImage}>
-						<Box
-							display="flex"
-							justifyContent="flex-end"
-							paddingTop="0.8125rem"
-							paddingRight="0.5rem"
+					<Box className={styles['card-boxes']}>
+						<Button
+							className={classNames(
+								styles['thumbnail-button'],
+								styles['button']
+							)}
+							onClick={() => handleThumbnailSelection('secondary')}
 						>
+							<FaChalkboardTeacher className={styles['thumbnail-icons']} />
+						</Button>
+					</Box>
+					<Box className={styles['card-boxes']}>
+						<div {...getRootProps()}>
+							<input {...getInputProps()} />
 							<Button
-								className={classes.thumbnailButton}
-								onClick={() => handleThumbnailSelection('primary')}
+								key={chapter.id}
+								className={classNames(
+									styles['thumbnail-button'],
+									styles['button']
+								)}
+								onClick={open}
 							>
-								<FaImages className={classes.thumbnailIcons} />
+								<FaUpload className={styles['thumbnail-icons']} />
 							</Button>
-						</Box>
-						<Box className={classes.boxes}>
-							<Button
-								className={classes.thumbnailButton}
-								onClick={() => handleThumbnailSelection('secondary')}
-							>
-								<FaChalkboardTeacher className={classes.thumbnailIcons} />
-							</Button>
-						</Box>
-						<Box className={classes.boxes}>
-							<div {...getRootProps()}>
-								<input {...getInputProps()} />
-								<Button
-									key={chapter.id}
-									className={classes.thumbnailButton}
-									onClick={open}
-								>
-									<FaUpload className={classes.thumbnailIcons} />
-								</Button>
-							</div>
-						</Box>
-					</CardMedia>
-				</div>
-				<div className={styles['CustomCard__TimeLabel']}>
-					In {hhmmss(inSeconds(chapter.position))}
-				</div>
-				<EditableTextField
-					type="text"
-					value={chapter.title}
-					updateTitleFunction={updateTitleFunction}
-					chapter={chapter}
-					isTextFieldBeingEdited={isTextFieldBeingEdited}
-				/>
-			</Card>
-		</div>
+						</div>
+					</Box>
+				</CardMedia>
+			</div>
+			<div className={styles['time-label']}>
+				In {hhmmss(inSeconds(chapter.position))}
+			</div>
+			<EditableTextField
+				type="text"
+				value={chapter.title}
+				updateTitleFunction={updateTitleFunction}
+				chapter={chapter}
+				isTextFieldBeingEdited={isTextFieldBeingEdited}
+			/>
+		</Card>
 	);
 };
 

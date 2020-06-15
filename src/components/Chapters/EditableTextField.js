@@ -1,20 +1,8 @@
 import React, { useState } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 
 import styles from './EditableTextField.module.scss';
-
-const useStyles = makeStyles({
-	editableTextField: {
-		fontSize: '0.75rem',
-		color: 'black',
-		background: '#ECECEC',
-		height: '2.5rem',
-		width: '100%',
-		padding: '0.3125rem 0.625rem 0.125rem 0.625rem',
-	},
-});
 
 const EditableTextField = ({
 	type,
@@ -26,7 +14,6 @@ const EditableTextField = ({
 	const [editable, setEditable] = useState(false);
 	const [fieldValue, setFieldValue] = useState(value);
 	const [fieldBackupValue, setFieldBackupValue] = useState('');
-	const classes = useStyles();
 
 	const handleInputOnChange = (event) => {
 		setFieldValue(event.target.value);
@@ -65,13 +52,13 @@ const EditableTextField = ({
 	};
 
 	return (
-		<div className={styles['description-label']}>
+		<div>
 			{editable ? (
 				<Input
 					id="chapter-title"
 					type={type}
 					value={fieldValue}
-					className={classes.editableTextField}
+					className={styles['editable-textField']}
 					autoFocus
 					multiline={true}
 					onFocus={handleInputOnFocus}
@@ -84,7 +71,7 @@ const EditableTextField = ({
 					}}
 				/>
 			) : (
-				<div className={styles['textfield-label']} onClick={handleFieldOnClick}>
+				<div className={styles['textField-label']} onClick={handleFieldOnClick}>
 					{fieldValue}
 				</div>
 			)}

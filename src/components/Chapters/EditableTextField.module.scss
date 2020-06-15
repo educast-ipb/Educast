@@ -1,8 +1,17 @@
-.textfield-label {
+.textField-label {
 	font-size: 0.75rem;
 	height: 2.5rem;
 	padding: 0.3125rem 0.625rem 0.125rem 0.625rem;
 	width: 100%;
 	background: #ececec;
 	cursor: pointer;
+}
+
+.editable-textField {
+	font-size: 0.75rem !important;
+	color: black !important;
+	background: #ececec; // import default color
+	height: 2.5rem !important;
+	width: 100%;
+	padding: 0.3125rem 0.625rem 0.125rem 0.625rem !important;
 }

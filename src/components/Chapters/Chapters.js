@@ -21,38 +21,33 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 	);
 
 	const updateChapterImg = useCallback(
-		(newImg, chId) => {
+		(chId, newImg) => {
 			dispatch({ type: 'UPDATE_CHAPTER_IMG', img: newImg, id: chId });
 		},
 		[dispatch]
 	);
 
 	const updateChapterTitle = useCallback(
-		(newTitle, chId) => {
+		(chId, newTitle) => {
 			dispatch({ type: 'UPDATE_CHAPTER_TITLE', title: newTitle, id: chId });
 		},
 		[dispatch]
 	);
 
-	const selectThumbnailFunction = (chapterId, path) => {
-		updateChapterImg(path, chapterId);
-	};
-
-	const updateTitleFunction = (id, newTitle) => {
-		updateChapterTitle(newTitle, id);
-	};
-
-	const selectChapter = useCallback((id) => {
-		const updatedChapters = chs.map((ch) => {
-			if (id === ch.id) {
-				ch.isSelected = true;
-			} else {
-				ch.isSelected = false;
-			}
-			return ch;
-		});
-		dispatch({ type: 'SET_CHAPTERS', chapters: updatedChapters });
-	}, [chs, dispatch]);
+	const selectChapter = useCallback(
+		(id) => {
+			const updatedChapters = chs.map((ch) => {
+				if (id === ch.id) {
+					ch.isSelected = true;
+				} else {
+					ch.isSelected = false;
+				}
+				return ch;
+			});
+			dispatch({ type: 'SET_CHAPTERS', chapters: updatedChapters });
+		},
+		[chs, dispatch]
+	);
 
 	const deleteChapterFunction = async (id) => {
 		const chapter = chs.find((chapter) => chapter.id === id);
@@ -67,9 +62,9 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 			confirmButtonText: 'Excluir',
 			cancelButtonText: 'Cancelar',
 			customClass: {
-				confirmButton: styles['confirm-button'],
-				cancelButton: styles['cancel-button'],
-				popup: styles['popup-modal'],
+				confirmButton: styles['no-border'],
+				cancelButton: styles['no-border'],
+				popup: styles['no-border'],
 			},
 		}).then((result) => {
 			if (result.value) {
@@ -83,8 +78,8 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 	return (
 		<CustomSlider
 			deleteChapterFunction={deleteChapterFunction}
-			updateTitleFunction={updateTitleFunction}
-			selectThumbnailFunction={selectThumbnailFunction}
+			updateTitleFunction={updateChapterTitle}
+			selectThumbnailFunction={updateChapterImg}
 			getPresenterScreenShot={getPresenterScreenShot}
 			getPresentationScreenShot={getPresentationScreenShot}
 			selectChapter={selectChapter}

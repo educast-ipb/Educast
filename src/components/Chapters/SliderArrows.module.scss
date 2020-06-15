@@ -1,0 +1,13 @@
+.arrow {
+	position: relative;
+	color: #0099ff !important; // import default color
+	font-size: 3.5rem !important;
+}
+
+.arrow:hover {
+	background: rgba(0, 0, 0, 0) !important;
+}
+
+.arrow:focus {
+	outline: none;
+}
