@@ -3,11 +3,93 @@ import { useSelector } from 'react-redux';
 
 import 'react-multi-carousel/lib/styles.css';
 import Carousel from 'react-multi-carousel';
+import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 
 import styles from './CustomSlider.module.scss';
 import CustomCard from './CustomCard';
 import { CustomRightArrow, CustomLeftArrow } from './SliderArrows';
+
+// Breakpoints in pixels for limiting how many cards will be shown.
+const responsive = {
+	Yes: {
+		breakpoint: {
+			max: 10000,
+			min: 2240,
+		},
+		items: 10,
+	},
+	FHDPlus: {
+		breakpoint: {
+			max: 2240,
+			min: 2040,
+		},
+		items: 9,
+	},
+	FHD: {
+		breakpoint: {
+			max: 2040,
+			min: 1840,
+		},
+		items: 8,
+	},
+	FHDMinus: {
+		breakpoint: {
+			max: 1840,
+			min: 1640,
+		},
+		items: 7,
+	},
+	desktop: {
+		breakpoint: {
+			max: 1640,
+			min: 1440,
+		},
+		items: 6,
+	},
+	HDPlus: {
+		breakpoint: {
+			max: 1440,
+			min: 1240,
+		},
+		items: 5,
+	},
+	HDMinus: {
+		breakpoint: {
+			max: 1240,
+			min: 1040,
+		},
+		items: 4,
+	},
+	tabletPlus: {
+		breakpoint: {
+			max: 1040,
+			min: 840,
+		},
+		items: 3,
+	},
+	tabletMinus: {
+		breakpoint: {
+			max: 840,
+			min: 640,
+		},
+		items: 2,
+	},
+	mobile: {
+		breakpoint: {
+			max: 640,
+			min: 420,
+		},
+		items: 2,
+	},
+	mobileMinus: {
+		breakpoint: {
+			max: 420,
+			min: 0,
+		},
+		items: 1,
+	},
+};
 
 const CustomSlider = ({
 	deleteChapterFunction,
@@ -23,9 +105,17 @@ const CustomSlider = ({
 	const [size, setSize] = useState([0, 0]);
 	const [scrollBarValue, setScrollBarValue] = useState(0);
 	const [disableScrollBar, setDisableScrollBar] = useState(false);
+	const styling = makeStyles({
+		scrollBar: {
+			'&::-webkit-slider-thumb': {
+				width: scrollBarValue + '%',
+			},
+		},
+	});
+	const classes = styling();
 	const chs = useSelector((state) => state.sceneChapters.chapters);
 
-	// Prevents carousel overflow by forcing maximum valid value.
+	// Prevents carousel overflow caused by sliding by forcing maximum valid value.
 	const resizeWindow = useCallback(() => {
 		setSize([window.innerWidth, window.innerHeight]);
 		if (carouselRef.current.state) {
@@ -58,57 +148,33 @@ const CustomSlider = ({
 		return () => window.removeEventListener('resize', resizeWindow);
 	}, [resizeWindow]);
 
-	// Breakpoints in pixels for limiting how many cards will be shown.
-	const responsive = {
-		desktop: {
-			breakpoint: {
-				max: 3000,
-				min: 1230,
-			},
-			items: 5,
-		},
-		mobile: {
-			breakpoint: {
-				max: 840,
-				min: 0,
-			},
-			items: 2,
-		},
-		tablet: {
-			breakpoint: {
-				max: 1230,
-				min: 840,
-			},
-			items: 3,
-		},
-	};
-
 	useEffect(() => {
 		// Maximum amount of cards that fits in screen size.
 		const length = () => {
 			const width = size[0];
-			if (width > responsive.desktop.breakpoint.min) {
-				return responsive.desktop.items;
-			} else if (width > responsive.tablet.breakpoint.min) {
-				return responsive.tablet.items;
-			} else if (width > responsive.mobile.breakpoint.min) {
-				return responsive.mobile.items;
+			for (var screenType in responsive) {
+				if (
+					width >= responsive[screenType].breakpoint.min &&
+					width <= responsive[screenType].breakpoint.max
+				) {
+					return responsive[screenType].items;
+				}
 			}
 		};
 		// Sets scrollbar width.
 		setScrollBarValue(getScrollBarWidth(length(), chs.length));
-	}, [chs.length, size, responsive]);
+	}, [chs.length, size]);
 
 	// Calculates scrollbar width in percentage.
 	const getScrollBarWidth = (itemsThatFit, total) => {
 		let size = 0;
 		if (total > 0 && total > itemsThatFit) {
 			setDisableScrollBar(false);
-			size = (itemsThatFit / total).toFixed(1) * 100;
-			if (size > 80) {
-				size = 80;
-			} else if (size < 20) {
-				size = 20;
+			size = (itemsThatFit / total) * 100;
+			if (size > 90) {
+				size = 90;
+			} else if (size < 10) {
+				size = 10;
 			}
 		} else {
 			if (itemsThatFit !== 0) {
@@ -117,11 +183,6 @@ const CustomSlider = ({
 			}
 		}
 		return size;
-	};
-
-	// Helper for disabling draggable action on carousel if card description is being edited.
-	const isTextFieldBeingEdited = (isIt) => {
-		setCarouselDraggable(!isIt);
 	};
 
 	// Deletes card and updates carousel state/scrollbar value.
@@ -163,6 +224,11 @@ const CustomSlider = ({
 		);
 	};
 
+	// Helper for disabling draggable action on carousel if card description is being edited.
+	const shouldDraggableBeDisabled = useCallback((yes) => {
+		setCarouselDraggable(!yes);
+	}, []);
+
 	// Cards to be shown in carousel.
 	const cardsToShow = () => {
 		let order = 0;
@@ -181,7 +247,7 @@ const CustomSlider = ({
 					selectThumbnailFunction={selectThumbnailFunction}
 					getPresenterScreenShot={getPresenterScreenShot}
 					getPresentationScreenShot={getPresentationScreenShot}
-					isTextFieldBeingEdited={isTextFieldBeingEdited}
+					disableDraggableCarousel={shouldDraggableBeDisabled}
 					selectChapter={() => selectChapter(chapter.id)}
 				></CustomCard>
 			);
@@ -207,7 +273,6 @@ const CustomSlider = ({
 
 	// Carousel's scrollbar.
 	const ChapterScrollbar = () => {
-		carouselRef.current.isAnimationAllowed = false;
 		let value = 0.0;
 		if (carouselRef) {
 			const maxTranslateX = getMaxTranslateX();
@@ -215,16 +280,15 @@ const CustomSlider = ({
 		}
 		const { transform, itemWidth } = carouselRef.current.state;
 		const scrollBarOnChange = (e) => {
-			carouselRef.current.isAnimationAllowed = false;
+			if (carouselRef.current.isAnimationAllowed) {
+				carouselRef.current.isAnimationAllowed = false;
+			}
 			const nextTransform = e.target.value * value;
 			const nextSlide = Math.round(nextTransform / itemWidth);
 			carouselRef.current.setState({
 				transform: -nextTransform,
 				currentSlide: nextSlide,
 			});
-			if (e.target.value === 0) {
-				carouselRef.current.isAnimationAllowed = true;
-			}
 		};
 		return (
 			<div className={styles['custom-slider']}>
@@ -236,8 +300,8 @@ const CustomSlider = ({
 					onChange={scrollBarOnChange}
 					disabled={disableScrollBar}
 					className={classNames(
-						styles[`custom-slider__input${scrollBarValue}`],
-						styles[`custom-slider__input`]
+						styles[`custom-slider__input`],
+						classes.scrollBar
 					)}
 				/>
 			</div>
@@ -250,7 +314,7 @@ const CustomSlider = ({
 			<Carousel
 				className={styles['custom-carousel']}
 				additionalTransform={0}
-				ssr={false}
+				// ssr={false}
 				ref={carouselRef}
 				arrows={false}
 				keyBoardControl={false}

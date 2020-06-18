@@ -49,7 +49,7 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 		[chs, dispatch]
 	);
 
-	const deleteChapterFunction = async (id) => {
+	const deleteChapterFunction = useCallback(async (id) => {
 		const chapter = chs.find((chapter) => chapter.id === id);
 		let deleted = false;
 		const chTitle = chapter.title !== undefined ? chapter.title : '';
@@ -73,7 +73,7 @@ const Chapters = ({ getPresenterScreenShot, getPresentationScreenShot }) => {
 			}
 		});
 		return deleted;
-	};
+	}, [chs, excludeChapter]);
 
 	return (
 		<CustomSlider

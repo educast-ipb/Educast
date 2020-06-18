@@ -68,6 +68,7 @@ const EditableTextField = ({
 					rowsMax={2}
 					inputProps={{
 						'aria-label': 'title',
+						maxLength: 50,
 					}}
 				/>
 			) : (

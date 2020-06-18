@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
 import Card from '@material-ui/core/Card';
@@ -26,7 +26,7 @@ const CustomCard = ({
 	selectThumbnailFunction,
 	getPresentationScreenShot,
 	getPresenterScreenShot,
-	isTextFieldBeingEdited,
+	disableDraggableCarousel,
 	selectChapter,
 }) => {
 	const [thumbnailImage, setThumbnailImage] = useState('');
@@ -37,15 +37,23 @@ const CustomCard = ({
 	}, [chapter.img]);
 
 	// Changes card thumbnail.
-	const handleThumbnailSelection = (path) => {
-		if (path === 'primary') {
-			chapter.img = getPresentationScreenShot();
-		} else if (path === 'secondary') {
-			chapter.img = getPresenterScreenShot();
-		}
-		selectThumbnailFunction(chapter.id, chapter.img);
-		setThumbnailImage(chapter.img);
-	};
+	const handleThumbnailSelection = useCallback(
+		(path) => {
+			if (path === 'primary') {
+				chapter.img = getPresentationScreenShot();
+			} else if (path === 'secondary') {
+				chapter.img = getPresenterScreenShot();
+			}
+			selectThumbnailFunction(chapter.id, chapter.img);
+			setThumbnailImage(chapter.img);
+		},
+		[
+			chapter,
+			getPresentationScreenShot,
+			getPresenterScreenShot,
+			selectThumbnailFunction,
+		]
+	);
 
 	// This is for image upload + generating image preview.
 	const { getRootProps, getInputProps, open } = useDropzone({
@@ -81,18 +89,20 @@ const CustomCard = ({
 		return Math.floor(videoInSeconds * position);
 	};
 
+	const layoutChapterSelected = useMemo(() => {
+		return chapter.isSelected === true
+			? { background: '#F69333' }
+			: { background: '#009bff' };
+	}, [chapter.isSelected]);
+
 	return (
 		<Card className={styles['root']} square={true}>
 			<CardMedia
 				className={styles['card-header']}
-				style={
-					chapter.isSelected === true
-						? { background: '#F69333' }
-						: { background: '#009bff' }
-				}
+				style={layoutChapterSelected}
 			>
 				<Typography
-					onClick={() => selectChapter()}
+					onClick={selectChapter}
 					className={styles['card-title']}
 					variant="h5"
 					component="h5"
@@ -103,18 +113,16 @@ const CustomCard = ({
 					<Button
 						key={chapter.id}
 						className={classNames(styles['delete-button'], styles['button'])}
-						onClick={() => deleteChapterFunction()}
+						onClick={deleteChapterFunction}
 					>
 						<FaTimes className={styles['delete-icon']} />
 					</Button>
 				</Box>
 			</CardMedia>
-			<div className={styles['unselectable-image']}>
+			<div className={styles['unSelectable-image']}>
 				<CardMedia className={styles['card-media']} image={thumbnailImage}>
 					<Box
-						className={styles['card-boxes']}
-						paddingTop="0.8125rem"
-						paddingRight="0.5rem"
+						className={classNames(styles['card-boxes'], styles['first-cardBox'])}
 					>
 						<Button
 							className={classNames(
@@ -154,16 +162,18 @@ const CustomCard = ({
 					</Box>
 				</CardMedia>
 			</div>
-			<div className={styles['time-label']}>
-				In {hhmmss(inSeconds(chapter.position))}
+			<div className={styles['card-description']}>
+				<div className={styles['time-label']}>
+					In {hhmmss(inSeconds(chapter.position))}
+				</div>
+				<EditableTextField
+					type="text"
+					value={chapter.title}
+					updateTitleFunction={updateTitleFunction}
+					chapter={chapter}
+					isTextFieldBeingEdited={disableDraggableCarousel}
+				/>
 			</div>
-			<EditableTextField
-				type="text"
-				value={chapter.title}
-				updateTitleFunction={updateTitleFunction}
-				chapter={chapter}
-				isTextFieldBeingEdited={isTextFieldBeingEdited}
-			/>
 		</Card>
 	);
 };

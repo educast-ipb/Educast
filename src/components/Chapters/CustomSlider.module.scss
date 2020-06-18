@@ -1,33 +1,31 @@
 .custom-slider__input {
 	width: 100%;
 	-webkit-appearance: none;
+
+	&::-webkit-slider-runnable-track {
+		background: #666666;
+		border: none;
+		border-radius: 3px;
+	}
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		border: none;
+		height: 1rem;
+		background: #d3d3d3;
+	}
+
+	&:focus {
+		background-color: #666666;
+		outline: none;
+	}
 }
 
-.custom-slider__input::-webkit-slider-runnable-track {
-	box-shadow: inset 0 0 6px rgba(80, 80, 80, 0.3);
-	-webkit-box-shadow: inset 0 0 6px rgba(80, 80, 80, 0.3);
-	background: #666666;
-	border: none;
-	border-radius: 3px;
-}
-
-.custom-slider__input::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	border: none;
-	height: 1rem;
-	box-shadow: inset 0 0 6px rgba(80, 80, 80, 0.3);
-	-webkit-box-shadow: inset 0 0 6px rgba(66, 62, 62, 0.3);
-	background: #d3d3d3;
-}
-
-.custom-slider__input:focus {
-	background-color: #666666;
-	outline: none;
-}
-
-.carousel-container-with-scrollBar {
+.root-slider {
 	width: 100%;
-	padding-bottom: 1.4375rem;
+	height: 100%;
+	display: flex;
+	align-items: center;
 }
 
 .custom-slider {
@@ -36,11 +34,9 @@
 	width: 100%;
 }
 
-.root-slider {
+.carousel-container-with-scrollBar {
 	width: 100%;
-	height: 100%;
-	display: flex;
-	align-items: center;
+	padding-bottom: 1.4375rem;
 }
 
 .slider-image-item {
@@ -52,37 +48,4 @@
 	right: 0;
 	margin-left: auto;
 	margin-right: auto;
-}
-
-// haha lol :D
-.custom-slider__input20::-webkit-slider-thumb {
-	width: 20%;
-}
-
-.custom-slider__input30::-webkit-slider-thumb {
-	width: 30%;
-}
-
-.custom-slider__input40::-webkit-slider-thumb {
-	width: 40%;
-}
-
-.custom-slider__input50::-webkit-slider-thumb {
-	width: 50%;
-}
-
-.custom-slider__input60::-webkit-slider-thumb {
-	width: 60%;
-}
-
-.custom-slider__input70::-webkit-slider-thumb {
-	width: 70%;
-}
-
-.custom-slider__input80::-webkit-slider-thumb {
-	width: 80%;
-}
-
-.custom-slider__input100::-webkit-slider-thumb {
-	width: 100%;
 }

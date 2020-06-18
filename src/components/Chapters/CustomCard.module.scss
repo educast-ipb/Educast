@@ -6,7 +6,7 @@
 	padding: 0.3125rem 0 0 0.625rem;
 }
 
-.unselectable-image {
+.unSelectable-image {
 	user-select: none;
 	-moz-user-select: none;
 	-khtml-user-select: none;
@@ -17,8 +17,8 @@
 .root {
 	min-width: 12.5rem;
 	max-width: 12.5rem;
-	min-height: 12.8125rem;
-	max-height: 12.8125rem;
+	min-height: 13.125rem; // 210px
+	max-height: 13.125rem; // 210px
 }
 
 .card-header {
@@ -47,15 +47,15 @@
 	border-radius: 0 !important;
 	color: #12aada !important; // import default color later
 	background-color: white !important;
-}
 
-.button:focus {
-	outline: 0;
-}
+	&:focus {
+		outline: 0;
+	}
 
-.button:hover {
-	color: #12aada;
-	background-color: #edd9ff !important;
+	&:hover {
+		color: #12aada;
+		background-color: #edd9ff !important;
+	}
 }
 
 .card-title {
@@ -86,6 +86,11 @@
 	padding-right: 0.5rem;
 }
 
+.first-cardBox {
+	padding-top: 0.8125rem;
+	padding-right: 0.5rem;
+}
+
 .thumbnail-icons {
 	max-width: 1rem;
 	max-height: 1rem;
@@ -98,4 +103,11 @@
 	max-height: 0.8125rem;
 	min-width: 0.8125rem;
 	min-height: 0.8125rem;
+}
+
+.card-description {
+	min-height: 4.0625rem;
+	max-height: 4.0625rem;
+	background: #ececec;
+	width: 100%;
 }
