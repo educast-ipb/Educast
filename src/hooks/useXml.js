@@ -6,12 +6,11 @@ import { getXMLTimeStamp } from '../utils/formatting';
 
 export function useXml(xml) {
 	const scenes = useSelector((state) => state.sceneChapters.scenes);
+	const chapters = useSelector((state) => state.sceneChapters.chapters);
 	const duration = useSelector((state) => state.video.duration);
 
-	console.log(scenes);
-
 	// const [scenes, setScenes] = useState([]);
-	const [chapters, setChapters] = useState([]);
+	// const [chapters, setChapters] = useState([]);
 	const [metadata, setMetadata] = useState([]);
 	const [xmlTxt, setXmlTxt] = useState(xml);
 	const [xmlJson, setXmlJson] = useState('');
@@ -29,23 +28,51 @@ export function useXml(xml) {
 		[duration]
 	);
 
+	const getXMLChapters = useCallback(
+		(chapter) => {
+			const marker_in_seconds = chapter.position * duration;
+
+			return {
+				marker_in: getXMLTimeStamp(marker_in_seconds * 1000),
+				title: chapter.title || '',
+				marker_thumbnail: getXMLTimeStamp(marker_in_seconds * 1000),
+				thumbnail_url: {
+					_attributes: {
+						read_only: true,
+					},
+					_text:
+						'https://educast.fccn.pt/img/clips/2jcdfpptkn/tmp/chapters/0000102667',
+				},
+			};
+		},
+		[duration]
+	);
+
 	useEffect(() => {
 		const xmlScenes = { scene: scenes.map(getXMLScene) };
-		console.log(xmlScenes);
 		setXmlJson((prev) => {
 			if (!prev) return prev;
-			prev['cutting_tool_data']['clip']['scenes'] = scenes;
+			prev['cutting_tool_data']['clip']['scenes'] = xmlScenes;
 			return { ...prev };
 		});
 	}, [getXMLScene, scenes]);
 
 	useEffect(() => {
+		const xmlChapters = {
+			_attributes: {
+				property_update_marker_thumbnail:
+					'https://educast.fccn.pt/clips/34114/cutting_tool_data/chapter_thumbnail.js?locale=en',
+				property_validation_title: '/^.{0,50}$/',
+			},
+			chapter: chapters.map(getXMLChapters),
+		};
+
 		setXmlJson((prev) => {
 			if (!prev) return prev;
-			prev['cutting_tool_data']['clip']['chapters'] = chapters;
+			prev['cutting_tool_data']['clip']['chapters'] = xmlChapters;
 			return { ...prev };
 		});
-	}, [chapters]);
+	}, [chapters, getXMLChapters]);
 
 	useEffect(() => {
 		setXmlJson((prev) => {
@@ -68,7 +95,6 @@ export function useXml(xml) {
 	}, [xmlJson]);
 
 	return {
-		setChapters,
 		setMetadata,
 		setXmlTxt,
 		getCompleteXML,
