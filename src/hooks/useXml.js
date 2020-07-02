@@ -1,20 +1,43 @@
 import { useState, useEffect, useCallback } from 'react';
 import { xml2json, json2xml } from 'xml-js';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
+import { getXMLTimeStamp } from '../utils/formatting';
 
-export function useXml() {
-	const [scenes, setScenes] = useState([]);
+export function useXml(xml) {
+	const scenes = useSelector((state) => state.sceneChapters.scenes);
+	const duration = useSelector((state) => state.video.duration);
+
+	console.log(scenes);
+
+	// const [scenes, setScenes] = useState([]);
 	const [chapters, setChapters] = useState([]);
 	const [metadata, setMetadata] = useState([]);
-	const [xmlTxt, setXmlTxt] = useState('');
+	const [xmlTxt, setXmlTxt] = useState(xml);
 	const [xmlJson, setXmlJson] = useState('');
 
+	const getXMLScene = useCallback(
+		(scene) => {
+			const marker_in_seconds = scene.start.x * duration;
+			const marker_out_seconds = scene.end.x * duration;
+
+			return {
+				marker_in: getXMLTimeStamp(marker_in_seconds * 1000),
+				marker_out: getXMLTimeStamp(marker_out_seconds * 1000),
+			};
+		},
+		[duration]
+	);
+
 	useEffect(() => {
+		const xmlScenes = { scene: scenes.map(getXMLScene) };
+		console.log(xmlScenes);
 		setXmlJson((prev) => {
 			if (!prev) return prev;
 			prev['cutting_tool_data']['clip']['scenes'] = scenes;
 			return { ...prev };
 		});
-	}, [scenes]);
+	}, [getXMLScene, scenes]);
 
 	useEffect(() => {
 		setXmlJson((prev) => {
@@ -45,7 +68,6 @@ export function useXml() {
 	}, [xmlJson]);
 
 	return {
-		setScenes,
 		setChapters,
 		setMetadata,
 		setXmlTxt,
