@@ -1,17 +1,28 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import * as Showdown from 'showdown';
 import ReactMde from 'react-mde';
 
 import style from './InputComment.module.scss';
 import './react-mde-all.scss';
 
-const InputComment = ({ title, type, value }) => {
+const InputComment = ({ title, name, onChange: handleChange, value }) => {
+	const [description, setDescription] = useState(value);
+	const [selectedTab, setSelectedTab] = useState('write');
+
 	const converter = new Showdown.Converter({
 		tables: true,
 		simplifiedAutoLink: true,
 		strikethrough: true,
 		tasklists: true,
 	});
+
+	const onChange = useCallback(
+		(value) => {
+			setDescription(value);
+			handleChange(name, value);
+		},
+		[handleChange, name]
+	);
 
 	const inputClasses = useMemo(
 		() => ({
@@ -38,8 +49,6 @@ const InputComment = ({ title, type, value }) => {
 		[converter]
 	);
 
-	const [description, setDescription] = React.useState(value);
-	const [selectedTab, setSelectedTab] = React.useState('write');
 	return (
 		<div>
 			<label>
@@ -49,7 +58,7 @@ const InputComment = ({ title, type, value }) => {
 					<ReactMde
 						className={style['textarea-comment']}
 						value={description}
-						onChange={setDescription}
+						onChange={onChange}
 						selectedTab={selectedTab}
 						minEditorHeight="5%"
 						minPreviewHeight="5%"
