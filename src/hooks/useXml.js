@@ -1,17 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { xml2json, json2xml } from 'xml-js';
 import { useSelector } from 'react-redux';
-import moment from 'moment';
 import { getXMLTimeStamp } from '../utils/formatting';
 
 export function useXml(xml) {
+	const { title, subtitle, date, local, description, tag } = useSelector(
+		(state) => state.metadata
+	);
 	const scenes = useSelector((state) => state.sceneChapters.scenes);
 	const chapters = useSelector((state) => state.sceneChapters.chapters);
 	const duration = useSelector((state) => state.video.duration);
 
-	// const [scenes, setScenes] = useState([]);
-	// const [chapters, setChapters] = useState([]);
-	const [metadata, setMetadata] = useState([]);
 	const [xmlTxt, setXmlTxt] = useState(xml);
 	const [xmlJson, setXmlJson] = useState('');
 
@@ -48,6 +47,61 @@ export function useXml(xml) {
 		[duration]
 	);
 
+	const getXMLMetadata = useCallback(
+		() => ({
+			title: {
+				_attributes: {
+					label: 'Title',
+					type: 'string',
+					validation: '/^.{0,100}$/',
+					validation_error_text: 'Title too long (max. 100 characters)',
+					default: '',
+					description: 'Title of this clip',
+					position: '1',
+				},
+				_text: title,
+			},
+			subtitle: {
+				_attributes: {
+					label: 'Subtitle',
+					type: 'string',
+					validation: '/^.{0,100}$/',
+					validation_error_text: 'Subitle too long (max. 100 characters)',
+					default: '',
+					description: 'Subtitle of this clip',
+					position: '2',
+				},
+				_text: subtitle,
+			},
+			location: {
+				_attributes: {
+					label: 'Location',
+					type: 'string',
+					validation: '/^.{0,100}$/',
+					validation_error_text: 'Location too long (max. 100 characters)',
+					default: '',
+					description: 'Where was the recording taken',
+					position: '4',
+				},
+				_text: local,
+			},
+			issued_on: {
+				_attributes: {
+					label: 'Date',
+					type: 'string',
+					validation: '/^.{0,50}$/',
+					validation_error_text: 'Date too long (max. 50 characters)',
+					default: '',
+					description:
+						'When was the recording taken (the format DD.MM.YYYY [hh:mm] is recommanded)',
+					position: '5',
+				},
+				_text: date,
+			},
+		}),
+		[date, local, subtitle, title]
+	);
+
 	useEffect(() => {
 		const xmlScenes = { scene: scenes.map(getXMLScene) };
 		setXmlJson((prev) => {
@@ -77,10 +131,10 @@ export function useXml(xml) {
 	useEffect(() => {
 		setXmlJson((prev) => {
 			if (!prev) return prev;
-			prev['cutting_tool_data']['clip']['metadata'] = metadata;
+			prev['cutting_tool_data']['clip']['metadata'] = getXMLMetadata();
 			return { ...prev };
 		});
-	}, [metadata]);
+	}, [getXMLMetadata]);
 
 	useEffect(() => {
 		if (!xmlTxt) return;
@@ -95,7 +149,6 @@ export function useXml(xml) {
 	}, [xmlJson]);
 
 	return {
-		setMetadata,
 		setXmlTxt,
 		getCompleteXML,
 	};
