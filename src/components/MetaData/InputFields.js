@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
-const InputFields = ({ title, type, value }) => {
+const InputFields = ({ title, name, type, value, onChange: handleChange }) => {
+	const [innerValue, setInnerValue] = useState(value);
+
+	const onChange = useCallback(
+		(e) => {
+			const { value } = e.target;
+			setInnerValue(value);
+			handleChange(name, value);
+		},
+		[handleChange, name]
+	);
+
 	return (
 		<div>
 			<label>
@@ -9,8 +20,8 @@ const InputFields = ({ title, type, value }) => {
 					<input
 						type={type}
 						name={title}
-						defaultValue={value}
-						onChange={value}
+						value={innerValue}
+						onChange={onChange}
 					/>
 				</h5>
 			</label>
