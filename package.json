@@ -13,7 +13,7 @@
     "classnames": "^2.2.6",
     "material-ui-chip-input": "^1.1.0",
     "moment": "^2.24.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-draggable": "^4.2.0",
